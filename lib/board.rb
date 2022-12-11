@@ -1,7 +1,9 @@
 # frozen_string_literal: true
-
+require_relative 'constants'
 class Board
   attr_reader :board
+
+  include Constants
 
   BOARD_WIDTH = 6
   BOARD_HEIGHT = 6
@@ -14,13 +16,10 @@ class Board
     return false unless valid_placement?(position)
 
     @board[position][find_lowest_empty_position(position)] = mark
+    true
   end
 
-  def valid_placement?(position)
-    @board[position].any?(&:nil?)
-  end
-
-  def check_winner(player_1_id, player_2_id)
+  def check_winner
     winner = nil
     all_combinations_four = []
     all_combinations_four << ascending_diagonals_four
@@ -29,10 +28,14 @@ class Board
     all_combinations_four << rows_four
     all_combinations_four.flatten!(1)
     all_combinations_four.each do |combination|
-      winner = player_1_id if combination.all? { |mark| mark == player_1_id }
-      winner = player_2_id if combination.all? { |mark| mark == player_2_id }
+      winner = PLAYER_1_ID if combination.all? { |mark| mark == PLAYER_1_ID }
+      winner = PLAYER_2_ID if combination.all? { |mark| mark == PLAYER_2_ID }
     end
     winner
+  end
+
+  def valid_placement?(position)
+    @board[position].any?(&:nil?)
   end
 
   private
