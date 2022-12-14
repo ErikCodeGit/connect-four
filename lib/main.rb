@@ -3,5 +3,5 @@
 require_relative 'game'
 require 'colorize'
 
-p String.colors
+p String.modes
 Game.new

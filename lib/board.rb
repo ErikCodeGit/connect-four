@@ -1,12 +1,10 @@
 # frozen_string_literal: true
+
 require_relative 'constants'
 class Board
   attr_reader :board
 
   include Constants
-
-  BOARD_WIDTH = 6
-  BOARD_HEIGHT = 6
 
   def initialize(board = Array.new(BOARD_WIDTH) { Array.new(BOARD_HEIGHT) })
     @board = board
@@ -34,6 +32,10 @@ class Board
     winner
   end
 
+  def full?
+    @board.all? { |columns| columns.none?(&:nil?) }
+  end
+
   def valid_placement?(position)
     @board[position].any?(&:nil?)
   end
@@ -46,8 +48,8 @@ class Board
 
   def ascending_diagonals_four
     result = []
-    3.times do |i| # go right for each column
-      3.times do |j| # go up in each column
+    (BOARD_WIDTH - 3).times do |i| # go right for each column
+      (BOARD_HEIGHT - 3).times do |j| # go up in each column
         diagonal = []
         4.times do |k| # go over elements
           diagonal << @board[k + i][k + j]
@@ -60,8 +62,8 @@ class Board
 
   def descending_diagonals_four
     result = []
-    3.times do |i| # go right for each column
-      3.times do |j| # go up in each column
+    (BOARD_WIDTH - 3).times do |i| # go right for each column
+      (BOARD_HEIGHT - 3).times do |j| # go up in each column
         diagonal = []
         4.times do |k| # go over elements
           diagonal << @board[k + i][(BOARD_HEIGHT - 1) - (k + j)]

@@ -1,26 +1,20 @@
 # frozen_string_literal: true
 
 require './lib/board'
+require './lib/constants'
+
+include Constants
 
 describe Board do
   describe '#initialize' do
     subject(:default_board) { described_class.new }
     context 'when default parameters are used' do
-      it 'is 6 elements wide' do
-        expect(default_board.board.length).to eq(6)
+      it "is #{BOARD_WIDTH} elements wide" do
+        expect(default_board.board.length).to eq(BOARD_WIDTH)
       end
 
-      it 'is 6 elements high' do
-        expect(default_board.board[0].length).to eq(6)
-      end
-    end
-    context 'when default parameters are used' do
-      it 'is 6 elements wide' do
-        expect(default_board.board.length).to eq(6)
-      end
-
-      it 'is 6 elements high' do
-        expect(default_board.board[0].length).to eq(6)
+      it "is #{BOARD_HEIGHT} elements high" do
+        expect(default_board.board[0].length).to eq(BOARD_HEIGHT)
       end
     end
   end
@@ -71,6 +65,24 @@ describe Board do
     context 'when column is full' do
       it 'returns false' do
         result = filled_board.place_mark(1, 0)
+        expect(result).to eq(false)
+      end
+    end
+  end
+
+  describe '#full?' do
+    subject(:filled_board) { described_class.new(Array.new(BOARD_WIDTH) { Array.new(BOARD_WIDTH, PLAYER_1_ID) }) }
+    context 'when board is full' do
+      it 'returns true' do
+        result = filled_board.full?
+        expect(result).to eq(true)
+      end
+    end
+
+    subject(:empty_board) { described_class.new }
+    context 'when board is empty' do
+      it 'returns false' do
+        result = empty_board.full?
         expect(result).to eq(false)
       end
     end

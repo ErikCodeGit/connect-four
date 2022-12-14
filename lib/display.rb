@@ -5,14 +5,6 @@ require_relative 'constants'
 
 module Display
   include Constants
-  ROW_WIDTH = 50
-  PLAYER_1_MARK = '⚫'
-  PLAYER_2_MARK = '⚫'
-  PLAYER_1_COLOR = :blue
-  PLAYER_2_COLOR = :magenta
-  EMPTY_MARK = '⛶'
-  HORIZONTAL_ROW_MARK = '🭹'
-  BOARD_HEADER = '₁  ₂  ₃  ₄  ₅  ₆'
   def display_start_message
     display_horizontal_row
     puts 'WELCOME TO CONNECT FOUR'
@@ -43,23 +35,24 @@ module Display
     print 'In which column do you want to place your mark?: '.colorize(color)
     response = ''
     loop do
-      response = player_input
+      response = gets.chomp
       break if valid_input?(response)
 
       display_horizontal_row
-      print 'Please enter a valid number (1-6): '.colorize(color)
+      print "Please enter a valid number (1-#{BOARD_WIDTH}): ".colorize(color)
     end
     display_horizontal_row
-    response.to_i
-  end
-
-  def player_input
-    gets.chomp
+    response.to_i - 1
   end
 
   def display_game_over_message(winner)
     color = set_color(winner)
     puts "PLAYER #{winner} WINS!".colorize(color)
+    display_horizontal_row
+  end
+
+  def display_draw_message
+    puts "IT'S A DRAW!".colorize(NEUTRAL_COLOR)
     display_horizontal_row
   end
 
@@ -70,9 +63,9 @@ module Display
     when PLAYER_1_ID
       PLAYER_1_COLOR
     when PLAYER_2_ID
-      PLAYER_2_COLOR 
+      PLAYER_2_COLOR
     else
-      :white
+      NEUTRAL_COLOR
     end
   end
 
